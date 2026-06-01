@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../data/models/post.dart';
 
 abstract class DashboardState extends Equatable {
   const DashboardState();
@@ -12,12 +13,12 @@ class DashboardInitial extends DashboardState {}
 class DashboardLoading extends DashboardState {}
 
 class DashboardLoaded extends DashboardState {
-  final List<dynamic> items;
+  final List<Post> posts;
 
-  const DashboardLoaded(this.items);
+  const DashboardLoaded(this.posts);
 
   @override
-  List<Object?> get props => [items];
+  List<Object?> get props => [posts];
 }
 
 class DashboardError extends DashboardState {

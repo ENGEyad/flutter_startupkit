@@ -1,5 +1,5 @@
-import '../../../../core/error/failures.dart';
+import '../../data/models/post.dart';
 
 abstract class DashboardRepository {
-  Future<List<dynamic>> fetchPosts();
+  Future<List<Post>> fetchPosts();
 }

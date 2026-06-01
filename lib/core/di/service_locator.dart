@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../features/dashboard/data/datasources/post_remote_data_source.dart';
 import '../../features/dashboard/data/repositories/dashboard_repository_impl.dart';
 import '../../features/dashboard/domain/repositories/dashboard_repository.dart';
 import '../../features/dashboard/presentation/controllers/dashboard_cubit.dart';
@@ -27,12 +28,17 @@ Future<void> initServiceLocator() async {
   // 3. Core State Controllers
   sl.registerFactory<ThemeCubit>(() => ThemeCubit(sl<LocalStorageService>()));
 
-  // 4. Feature Repositories
-  sl.registerLazySingleton<DashboardRepository>(
-    () => DashboardRepositoryImpl(sl<DioClient>()),
+  // 4. Data Sources
+  sl.registerLazySingleton<PostRemoteDataSource>(
+    () => PostRemoteDataSource(sl<DioClient>()),
   );
 
-  // 5. Feature State Controllers
+  // 5. Feature Repositories
+  sl.registerLazySingleton<DashboardRepository>(
+    () => DashboardRepositoryImpl(sl<PostRemoteDataSource>()),
+  );
+
+  // 6. Feature State Controllers
   sl.registerFactory<DashboardCubit>(
     () => DashboardCubit(sl<DashboardRepository>()),
   );

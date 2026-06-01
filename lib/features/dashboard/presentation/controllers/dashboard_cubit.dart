@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_startupkit/core/error/failures.dart';
 import '../../domain/repositories/dashboard_repository.dart';
 import 'dashboard_state.dart';
 
@@ -12,8 +13,10 @@ class DashboardCubit extends Cubit<DashboardState> {
     try {
       final posts = await _repository.fetchPosts();
       emit(DashboardLoaded(posts));
+    } on Failure catch (f) {
+      emit(DashboardError(f.message));
     } catch (e) {
-      emit(DashboardError(e.toString()));
+      emit(const DashboardError('An unexpected error occurred. Please try again.'));
     }
   }
 }

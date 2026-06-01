@@ -1,17 +1,14 @@
-import '../../../../core/network/dio_client.dart';
+import '../datasources/post_remote_data_source.dart';
+import '../models/post.dart';
 import '../../domain/repositories/dashboard_repository.dart';
 
 class DashboardRepositoryImpl implements DashboardRepository {
-  final DioClient _dioClient;
+  final PostRemoteDataSource _dataSource;
 
-  DashboardRepositoryImpl(this._dioClient);
+  DashboardRepositoryImpl(this._dataSource);
 
   @override
-  Future<List<dynamic>> fetchPosts() async {
-    final response = await _dioClient.get('https://jsonplaceholder.typicode.com/posts?_limit=5');
-    if (response.data is List) {
-      return response.data as List;
-    }
-    throw Exception('Unexpected response format');
+  Future<List<Post>> fetchPosts() async {
+    return _dataSource.fetchPosts();
   }
 }

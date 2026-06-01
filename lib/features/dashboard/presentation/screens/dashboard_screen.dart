@@ -8,12 +8,14 @@ import '../controllers/dashboard_cubit.dart';
 import '../controllers/dashboard_state.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  final DashboardCubit? cubit;
+
+  const DashboardScreen({super.key, this.cubit});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DashboardCubit>(
-      create: (_) => sl<DashboardCubit>(),
+      create: (_) => cubit ?? sl<DashboardCubit>(),
       child: const _DashboardContent(),
     );
   }
@@ -155,11 +157,11 @@ class _DashboardContent extends StatelessWidget {
                       return const LoadingIndicator();
                     } else if (state is DashboardLoaded) {
                       return ListView.separated(
-                        itemCount: state.items.length,
+                        itemCount: state.posts.length,
                         physics: const BouncingScrollPhysics(),
                         separatorBuilder: (context, index) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
-                          final item = state.items[index];
+                          final post = state.posts[index];
                           return Card(
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -169,7 +171,7 @@ class _DashboardContent extends StatelessWidget {
                                   CircleAvatar(
                                     backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
                                     child: Text(
-                                      '${item['id']}',
+                                      '${post.id}',
                                       style: TextStyle(
                                         color: theme.colorScheme.primary,
                                         fontWeight: FontWeight.bold,
@@ -182,7 +184,7 @@ class _DashboardContent extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          item['title'] ?? '',
+                                          post.title,
                                           style: theme.textTheme.bodyLarge?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -191,7 +193,7 @@ class _DashboardContent extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          item['body'] ?? '',
+                                          post.body,
                                           style: theme.textTheme.bodyMedium,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,

@@ -11,16 +11,18 @@ void main() async {
   // Initialize all dependencies in our service locator
   await initServiceLocator();
 
-  runApp(const MyApp());
+  runApp(MyApp(themeCubit: sl<ThemeCubit>()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ThemeCubit themeCubit;
+
+  const MyApp({super.key, required this.themeCubit});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ThemeCubit>(
-      create: (_) => sl<ThemeCubit>(),
+    return BlocProvider<ThemeCubit>.value(
+      value: themeCubit,
       child: BlocBuilder<ThemeCubit, bool>(
         builder: (context, isDarkMode) {
           return MaterialApp.router(

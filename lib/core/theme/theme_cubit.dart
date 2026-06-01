@@ -6,9 +6,9 @@ class ThemeCubit extends Cubit<bool> {
 
   ThemeCubit(this._storageService) : super(_storageService.getThemeMode());
 
-  void toggleTheme() {
+  Future<void> toggleTheme() async {
     final newMode = !state;
-    _storageService.saveThemeMode(newMode);
+    await _storageService.saveThemeMode(newMode);
     emit(newMode);
   }
 }
